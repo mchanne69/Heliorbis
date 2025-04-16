@@ -2,6 +2,18 @@ import sqlite3
 from flask import g
 from datetime import datetime
 
+create_table = """CREATE TABLE IF NOT EXISTS User (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            UserName TEXT NOT NULL UNIQUE,
+            Password TEXT NOT NULL,
+            Date_Created TEXT,
+            Last_Login_Date TEXT,
+            Num_Login_attempts INTEGER DEFAULT 0,
+            Last_PWD_Reset TEXT,
+            has_Admin INTEGER DEFAULT 0,
+            Account_Active INTEGER DEFAULT 0
+        )"""
+
 def init_db(app):
     def get_db():
         if 'db' not in g:
@@ -19,17 +31,5 @@ def init_db(app):
 
     with app.app_context():
         db = get_db()
-        db.execute(\"\"\"
-        CREATE TABLE IF NOT EXISTS User (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            UserName TEXT NOT NULL UNIQUE,
-            Password TEXT NOT NULL,
-            Date_Created TEXT,
-            Last_Login_Date TEXT,
-            Num_Login_attempts INTEGER DEFAULT 0,
-            Last_PWD_Reset TEXT,
-            has_Admin INTEGER DEFAULT 0,
-            Account_Active INTEGER DEFAULT 0
-        )
-        \"\"\")
+        db.execute(create_table)
         db.commit()

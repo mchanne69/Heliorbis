@@ -9,17 +9,19 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        print(f"Username: {username}")
         db = current_app.get_db()
-        user = db.execute(\"SELECT * FROM User WHERE UserName = ?\", (username,)).fetchone()
+        user = db.execute("SELECT * FROM User WHERE UserName = ?", (username,)).fetchone()
 
         if user and check_password_hash(user['Password'], password) and user['Account_Active']:
             session['user'] = username
-            db.execute(\"\"\"UPDATE User SET Last_Login_Date = ?, Num_Login_attempts = 0 WHERE id = ?\"\"\",
-                       (datetime.now(), user['id']))
+            db.execute("UPDATE User SET Last_Login_Date = ?, Num_Login_attempts = 0 WHERE id = ?", (datetime.now(), user['id']))
             db.commit()
+            print("Login Succssful")
             return redirect('/jump')
         elif user:
-            db.execute(\"\"\"UPDATE User SET Num_Login_attempts = Num_Login_attempts + 1 WHERE id = ?\"\"\", (user['id'],))
+            db.execute("UPDATE User SET Num_Login_attempts = Num_Login_attempts + 1 WHERE id = ?", (user['id'],))
+            print("Login Error")
             db.commit()
 
     return render_template('login.html')
@@ -27,19 +29,20 @@ def login():
 @bp.route('/request_access', methods=['GET', 'POST'])
 def request_access():
     if request.method == 'POST':
+        print(f"Requesting create a new user")
         username = request.form['username']
         password = request.form['password']
         db = current_app.get_db()
-        existing = db.execute(\"SELECT * FROM User WHERE UserName = ?\", (username,)).fetchone()
+        existing = db.execute("SELECT * FROM User WHERE UserName = ?", (username,)).fetchone()
 
         if not existing:
             now = datetime.now()
-            db.execute(\"\"\"INSERT INTO User (UserName, Password, Date_Created, Last_Login_Date,
-                        Last_PWD_Reset, Num_Login_attempts, has_Admin, Account_Active)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)\"\"\",
-                        (username, generate_password_hash(password), now, now, now, 0, 0, 0))
+            db.execute("INSERT INTO User (UserName, Password, Date_Created, Last_Login_Date, Last_PWD_Reset, Num_Login_attempts, has_Admin, Account_Active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",(username, generate_password_hash(password), now, now, now, 0, 0, 0))
+            print(f"Added {username}")
             db.commit()
             return redirect('/')
+        else:
+            print(f"user Exist {existing}")
     return render_template('request_access.html')
 
 @bp.route('/logout')
