@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <!-- Un-Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+</head>
+<body>
+    <header>
+        <h1>Administration Dashboard</h1>
+        <p>Site administrative functions are available on this page.</p>
+    </header>
+    <main>
+        <h1>Admin Dashboard</h1>
+
+        <h2>Failed Logins</h2>
+        <div class="language-plaintext highligther-rouge">
+        <div class="highlight">
+            <table>
+            <tr>
+                <th>User Name</th>
+                <th>Number of Failed Logins</th>
+                <th >Last Login Date</th>
+                <th >Last Password Reset Date</th>
+            </tr>
+            <tbody>
+            {% for user in failed_logins %}
+                <tr>
+                   <td>{{ user['UserName'] }}</td>
+                   <td>{{ user['Num_Login_attempts'] }}</td>
+                   <td>{{ user['Last_Login_Date'] }}</td>
+                   <td>{{  user['Last_PWD_Reset'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        </div>
+        <h2>Pending User Account Activation</h2>
+        <form method="post">
+          {% for user in pending_users %}
+            <input type="checkbox" name="activate" value="{{ user['UserName'] }}"> {{ user['UserName'] }}<br>
+          {% endfor %}
+          {% if pending_users %}
+            <button type="submit">Activate Accounts</button>
+          {% else %}
+            <p>No pending users.</p>
+          {% endif %}
+        </form>
+
+        <p><a href="/jump">Back to Dashboard</a></p>
+    </main>
+</body>
+</html>
+
+

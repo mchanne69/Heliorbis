@@ -1,6 +1,30 @@
-<p>Welcome, {{ user }} | <a href="/logout">Logout</a></p>
-<h2>Apps</h2>
-<ul>
-  <li><a href="/weather/">Weather App</a></li>
-  <!-- More apps here -->
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <!-- Un-Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <title>Welcome to </title>
+</head>
+<body>
+    <header>
+        <h1>Central Dashboard</h1>
+        <p>Access all the applications in XXX from this location.</p>
+    </header>
+    <main>
+        <p>Welcome, {{ user }} | <a href="/logout">Logout</a></p>
+
+        <h2>Apps</h2>
+        <ul>
+          <li><a href="/weather/">Weather App</a></li>
+          {% if is_admin %}
+            <li><a href="/admin/">Admin Panel</a></li>
+          {% endif %}
+       </ul>
+    </main>
+</body>
+</html>
+
+

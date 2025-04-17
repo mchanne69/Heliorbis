@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <!-- Un-Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <title>Weather App </title>
+</head>
+<body>
+    <header>
+        <h1>Weather Overview</h1>
+        <p>Check your weather</p>
+    </header>
+    <main>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        <label for="lat">Latitude:</label>
+        <input type="text" id="lat" name="lat" value="{{ lat }}">
+        <label for="lon">Longitude:</label>
+        <input type="text" id="lon" name="lon" value="{{ lon }}">
+        <button type="submit">Refresh</button>
+    </form>
+
+    {% if weather %}
+        <h2>Location: {{ weather.name }} ({{ weather.sys.country }})</h2>
+        <p><strong>Coordinates:</strong> {{ weather.coord.lat }}, {{ weather.coord.lon }}</p>
+        <p><strong>Weather:</strong> {{ weather.weather[0].main }} – {{ weather.weather[0].description }}</p>
+        <p><strong>Temperature:</strong> {{ weather.main.temp }} F</p>
+        <p><strong>Feels Like:</strong> {{ weather.main.feels_like }} F</p>
+        <p><strong>Humidity:</strong> {{ weather.main.humidity }}%</p>
+        <p><strong>Pressure:</strong> {{ weather.main.pressure }} hPa</p>
+        <p><strong>Wind:</strong> {{ weather.wind.speed }} m/hr, direction {{ weather.wind.deg }}°</p>
+        {% if weather.rain %}
+            <p><strong>Rain (1h):</strong> {{ weather.rain['1h'] }} mm</p>
+        {% endif %}
+        <p><strong>Cloud Cover:</strong> {{ weather.clouds.all }}%</p>
+    {% endif %}
+
+    <p><a href="/jump">Back to Dashboard</a></p>
+    </main>
+</body>
+</html>
+
