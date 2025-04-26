@@ -14,9 +14,60 @@
         <p>Check your weather</p>
     </header>
     <main>
-    {% if error %}
-        <p style="color:red;">{{ error }}</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div style="padding: 10px; margin-bottom: 10px; border: 1px solid red; background-color: #f8d7da; color: #721c24;">
+              {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if weather %}
+        {% if weather.name and weather.sys %}
+            <h2>Location: {{ weather.name }} ({{ weather.sys.country }})</h2>
+        {% endif %}
+
+        {% if weather.coord %}
+            <p><strong>Coordinates:</strong> {{ weather.coord.lat }}, {{ weather.coord.lon }}</p>
+        {% endif %}
+
+        {% if weather.weather %}
+            <p><strong>Weather:</strong> {{ weather.weather[0].main }} – {{ weather.weather[0].description }}</p>
+            {% if weather.weather[0].icon %}
+                <div style="margin-left: 80px;">
+                    <img src="https://openweathermap.org/img/wn/{{ weather.weather[0].icon }}@2x.png" alt="Weather icon">
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if weather.main %}
+            <p><strong>Temperature:</strong> {{ weather.main.temp }} F</p>
+            <p><strong>Feels Like:</strong> {{ weather.main.feels_like }} F</p>
+            <p><strong>Humidity:</strong> {{ weather.main.humidity }}%</p>
+            <p><strong>Pressure:</strong> {{ weather.main.pressure }} hPa</p>
+        {% endif %}
+
+        {% if weather.wind %}
+            <p><strong>Wind:</strong> {{ weather.wind.speed }} mph from {{ wind_label }}</p>
+            <div style="margin-left: 80px;">
+                {% if wind_img %}
+                    <img src="{{ url_for('static', filename='images/wind_dir.png') }}"
+                         alt="Wind direction" style="height:150px; vertical-align:middle; margin-left:10px;">
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if weather.rain %}
+            <p><strong>Rain (1h):</strong> {{ weather.rain['1h'] }} mm</p>
+        {% endif %}
+
+        {% if weather.clouds %}
+            <p><strong>Cloud Cover:</strong> {{ weather.clouds.all }}%</p>
+        {% endif %}
     {% endif %}
+
 
     <form method="post">
         <label for="lat">Latitude:</label>
@@ -25,21 +76,6 @@
         <input type="text" id="lon" name="lon" value="{{ lon }}">
         <button type="submit">Refresh</button>
     </form>
-
-    {% if weather %}
-        <h2>Location: {{ weather.name }} ({{ weather.sys.country }})</h2>
-        <p><strong>Coordinates:</strong> {{ weather.coord.lat }}, {{ weather.coord.lon }}</p>
-        <p><strong>Weather:</strong> {{ weather.weather[0].main }} – {{ weather.weather[0].description }}</p>
-        <p><strong>Temperature:</strong> {{ weather.main.temp }} F</p>
-        <p><strong>Feels Like:</strong> {{ weather.main.feels_like }} F</p>
-        <p><strong>Humidity:</strong> {{ weather.main.humidity }}%</p>
-        <p><strong>Pressure:</strong> {{ weather.main.pressure }} hPa</p>
-        <p><strong>Wind:</strong> {{ weather.wind.speed }} m/hr, direction {{ weather.wind.deg }}°</p>
-        {% if weather.rain %}
-            <p><strong>Rain (1h):</strong> {{ weather.rain['1h'] }} mm</p>
-        {% endif %}
-        <p><strong>Cloud Cover:</strong> {{ weather.clouds.all }}%</p>
-    {% endif %}
 
     <p><a href="/jump">Back to Dashboard</a></p>
     </main>

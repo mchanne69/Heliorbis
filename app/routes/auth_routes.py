@@ -8,6 +8,13 @@ logger = get_logger(__name__)
 
 bp = Blueprint('auth_routes', __name__)
 
+"""
+Authentication Routes:
+- Handle user login
+- Handle user account requests
+- Handle user logout
+"""
+
 @bp.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

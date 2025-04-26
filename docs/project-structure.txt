@@ -1,0 +1,35 @@
+Heliorbis/
+├── run.py
+├── .env
+├── config.py
+├── requirements.txt
+├── HO_admin.sqlite
+├── app/
+│   ├── __init__.py
+│   ├── database.py
+│   ├── utils.py
+│   ├── static/
+│   │   ├── css/
+│   │   ├── js/
+│   │   └── images/
+│   ├── templates/
+│   │   ├── login.html
+│   │   ├── request_access.html
+│   │   └── jump_page.html
+│   └── routes/
+│       ├── auth_routes.py
+│       ├── main_routes.py
+│       ├── ho_weather/
+│       │   ├── routes.py
+│       │   ├── utils.py
+│       │   └── templates/
+│       │       └── ho_weather.html
+│       └── ho_admin/
+│           ├── routes.py
+│           └── templates/
+│               └── ho_admin.html
+└── app/tests/
+    ├── conftest.py
+    ├── test_auth_routes.py
+    ├── test_admin_routes.py
+    └── test_weather_routes.py

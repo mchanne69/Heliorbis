@@ -6,6 +6,13 @@ logger = get_logger(__name__)
 
 bp = Blueprint('admin_routes', __name__, url_prefix='/admin', template_folder='templates')
 
+"""
+Admin Module Routes:
+- Display failed login attempts
+- Manage pending user account approvals
+- Restrict access to admin users only
+"""
+
 @bp.route('/', methods=['GET', 'POST'])
 @admin_required
 def admin_panel():
